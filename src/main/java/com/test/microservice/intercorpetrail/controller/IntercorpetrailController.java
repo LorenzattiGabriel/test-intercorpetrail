@@ -42,17 +42,7 @@ public class IntercorpetrailController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/search/", method = RequestMethod.GET)
-    public List<Person> getPersons() {
-      return  intercorpService.getPersons();
 
-    }
-
-    @RequestMapping(value = "/average/", method = RequestMethod.GET)
-    public Double getAverageAge() {
-       return intercorpService.getAverageAge();
-
-    }
 
 
 }
