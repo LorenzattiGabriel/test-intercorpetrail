@@ -1,12 +1,12 @@
 package com.test.microservice.intercorpetrail.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Calendar;
+
 
 /**
  * Created by gabriellorenzatti on 27/07/2019.
@@ -25,16 +25,15 @@ public class Person implements Serializable {
     @NotNull
     private String lastname;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     @Temporal(TemporalType.DATE)
-    private Date birthday;
+    private Calendar birthday;
 
     @NotNull
     private int age;
 
-    @Transient
-    private Date dateOfDeath;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Calendar dateOfDeath;
 
 
     public String getName() {
@@ -53,24 +52,16 @@ public class Person implements Serializable {
         this.lastname = lastname;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Calendar birthday) {
         this.birthday = birthday;
     }
 
-    public Date getDateOfDeath() {
+    public Calendar getDateOfDeath() {
         return dateOfDeath;
     }
 
-    public void setDateOfDeath(Date dateOfDeath) {
+    public void setDateOfDeath(Calendar dateOfDeath) {
         this.dateOfDeath = dateOfDeath;
-    }
-
-    public int getAge() {
-        return age;
     }
 
     public void setAge(int age) {

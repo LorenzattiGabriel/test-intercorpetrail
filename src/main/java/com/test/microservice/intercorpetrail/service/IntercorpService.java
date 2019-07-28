@@ -2,13 +2,14 @@ package com.test.microservice.intercorpetrail.service;
 
 import com.test.microservice.intercorpetrail.exceptions.BussinesLogicException;
 import com.test.microservice.intercorpetrail.model.Person;
+import com.test.microservice.intercorpetrail.model.PersonWrapper;
 import com.test.microservice.intercorpetrail.repository.PersonRepository;
 import com.test.microservice.intercorpetrail.util.RandomDates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,7 +24,7 @@ public class IntercorpService {
         randomDates = new RandomDates();
     }
 
-    public void registerNewPerson(Person person) throws BussinesLogicException {
+    public void registerNewPerson(PersonWrapper person) throws BussinesLogicException {
         Person newperson = buildPerson(person);
 
         personRepository.save(newperson);
@@ -39,23 +40,30 @@ public class IntercorpService {
         return ageOfPersons.stream().mapToInt((x) -> x).summaryStatistics().getAverage();
     }
 
-    private Date getDateOfDead(Date birthday) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(birthday);
-        return randomDates.getRandomDeathDate(cal.get(Calendar.YEAR));
-    }
 
-    private Person buildPerson(Person person) throws BussinesLogicException {
-        Person newPerson;
+    private Person buildPerson(PersonWrapper person) throws BussinesLogicException {
+        Person newPerson = new Person();
 
-        if (person.getBirthday() != null) {
-            newPerson = person;
-            newPerson.setDateOfDeath(getDateOfDead(person.getBirthday()));
+        if (person.getDateOfBorn() != null && person.getAge() > 0) {
+            newPerson.setAge(person.getAge());
+            newPerson.setName(person.getName());
+            newPerson.setLastname(person.getLastname());
+            newPerson.setBirthday(getDateOfBirthday(person));
+             Calendar dateOfDead = randomDates.getRandomDeathDate(person.getDateOfBorn().getYear());
+            newPerson.setDateOfDeath(dateOfDead);
         } else {
-            throw new BussinesLogicException("invalid date of birth");
+            throw new BussinesLogicException("invalid fields for person");
         }
 
         return newPerson;
+    }
+
+    private Calendar getDateOfBirthday(PersonWrapper person) {
+        Calendar birthday =  Calendar.getInstance();
+        LocalDate dateOfBorn = person.getDateOfBorn();
+        birthday.set(dateOfBorn.getYear(),dateOfBorn.getMonth().getValue(),dateOfBorn.getDayOfMonth());
+
+        return birthday;
     }
 
 }

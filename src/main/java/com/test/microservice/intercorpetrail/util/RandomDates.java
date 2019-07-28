@@ -1,15 +1,14 @@
 package com.test.microservice.intercorpetrail.util;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 public class RandomDates {
 
     public static final int MAXAVERAGEOFAGE = 90;
 
-    public Date getRandomDeathDate(int yearOfBorn) {
+    public Calendar getRandomDeathDate(int yearOfBorn) {
 
-        GregorianCalendar dateOfDeath = new GregorianCalendar();
+        Calendar dateOfDeath = Calendar.getInstance();
         int maxAgeOfdead = yearOfBorn + MAXAVERAGEOFAGE;
 
         int year = randBetween(yearOfBorn, maxAgeOfdead);
@@ -20,7 +19,7 @@ public class RandomDates {
 
         dateOfDeath.set(dateOfDeath.DAY_OF_YEAR, dayOfYear);
 
-        return dateOfDeath.getGregorianChange();
+        return dateOfDeath;
     }
 
     private int randBetween(int start, int end) {
